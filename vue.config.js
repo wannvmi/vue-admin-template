@@ -1,12 +1,13 @@
 'use strict'
+const webpack = require('webpack')
+const packageinfo = require('./package.json')
+
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
 
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
-
-const name = defaultSettings.title || 'vue Admin Template' // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -24,11 +25,23 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  publicPath: '/',
+  publicPath: process.env.VUE_APP_PUBLIC_PATH,
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
+  runtimeCompiler: true,
   productionSourceMap: false,
+  css: {
+    // 给 sass-loader 传递选项
+    loaderOptions: {
+      // @/ 是 src/ 的别名
+      // 所以这里假设你有 `src/variables.sass` 这个文件
+      // 注意：在 sass-loader v8 中，这个选项名是 "prependData"
+      sass: {
+        additionalData: "@import '~@/styles/public.scss';"
+      }
+    }
+  },
   devServer: {
     port: port,
     open: true,
@@ -38,14 +51,27 @@ module.exports = {
     },
     before: require('./mock/mock-server.js')
   },
-  configureWebpack: {
-    // provide the app's title in webpack's name field, so that
-    // it can be accessed in index.html to inject the correct title.
-    name: name,
-    resolve: {
-      alias: {
-        '@': resolve('src')
-      }
+  // 正式生产代理
+  // devServer: {
+  //   port: port,
+  //   open: true,
+  //   // host: 'localhost', // target host
+  //   // port: 8080,
+  //   proxy: {
+  //     '/dev-api': {
+  //       target: process.env.VUE_APP_API_DEV_API,
+  //       changeOrigin: true,
+  //       pathRewrite: {
+  //         '^/dev-api': '/'
+  //       }
+  //     }
+  //   }
+  // },
+  configureWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      // mutate config for production...
+    } else {
+      // mutate for development...
     }
   },
   chainWebpack(config) {
@@ -62,6 +88,11 @@ module.exports = {
 
     // when there are many pages, it will cause too many meaningless requests
     config.plugins.delete('prefetch')
+
+    config.plugin('html').tap((args) => {
+      args[0].title = defaultSettings.title
+      return args
+    })
 
     // set svg-sprite-loader
     config.module
@@ -119,5 +150,19 @@ module.exports = {
           config.optimization.runtimeChunk('single')
         }
       )
-  }
+
+    // vue-cli 4.0 删除打包console.log vue-cli 4.0 删除打包console.log
+    // https://cli.vuejs.org/migrating-from-v3/#the-minimizer-method-in-chainwebpack
+    config.optimization.minimizer('terser').tap((args) => {
+      args[0].terserOptions.compress.drop_console = true
+      return args
+    })
+
+    // packageinfo.version
+    config
+      .plugin('banner')
+      .use(webpack.BannerPlugin, [`pacakge version: ${packageinfo.version}`])
+      .end()
+  },
+  pluginOptions: {}
 }
