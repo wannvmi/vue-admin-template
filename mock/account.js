@@ -11,11 +11,11 @@ module.exports = [
         data: {
           userRole: 'string',
           accessToken: 'string',
-          accessTokenExpireTime: '2021-02-22T11:18:21.543Z',
-          accessTokenExpireUtcTime: '2021-02-22T11:18:21.543Z',
+          accessTokenExpireTime: '2025-02-22T11:18:21.543Z',
+          accessTokenExpireUtcTime: '2025-02-22T11:18:21.543Z',
           refreshToken: 'string',
-          refreshTokenExpireTime: '2021-02-22T11:18:21.543Z',
-          scheme: 'string'
+          refreshTokenExpireTime: '2025-12-22T11:18:21.543Z',
+          scheme: 'Bearer'
         }
       }
     }
@@ -33,11 +33,11 @@ module.exports = [
         data: {
           userRole: 'string',
           accessToken: 'string',
-          accessTokenExpireTime: '2021-02-22T11:18:42.617Z',
-          accessTokenExpireUtcTime: '2021-02-22T11:18:42.617Z',
+          accessTokenExpireTime: '2025-02-22T11:18:21.543Z',
+          accessTokenExpireUtcTime: '2025-02-22T11:18:21.543Z',
           refreshToken: 'string',
-          refreshTokenExpireTime: '2021-02-22T11:18:42.617Z',
-          scheme: 'string'
+          refreshTokenExpireTime: '2025-12-22T11:18:21.543Z',
+          scheme: 'Bearer'
         }
       }
     }

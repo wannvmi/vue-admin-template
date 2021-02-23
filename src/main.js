@@ -50,9 +50,9 @@ import {
   FormItem,
   Tabs,
   TabPane,
-  //   Tag,
+  Tag,
   Tree,
-  //   Alert,
+  Alert,
   //   Slider,
   Icon,
   Row,
@@ -134,9 +134,9 @@ Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Tabs)
 Vue.use(TabPane)
-// Vue.use(Tag)
+Vue.use(Tag)
 Vue.use(Tree)
-// Vue.use(Alert)
+Vue.use(Alert)
 // Vue.use(Slider)
 Vue.use(Icon)
 Vue.use(Row)
@@ -191,10 +191,12 @@ Vue.prototype.$message = Message
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('../mock')
-  mockXHR()
-}
+// if (process.env.NODE_ENV === 'production') {
+//   const { mockXHR } = require('../mock')
+//   mockXHR()
+// }
+const { mockXHR } = require('../mock')
+mockXHR()
 
 new Vue({
   el: '#app',

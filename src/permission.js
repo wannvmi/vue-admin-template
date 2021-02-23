@@ -30,41 +30,42 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      if (store.getters.accessTokenExpireUtcTime) {
-        // 未超时
-        if (
-          dayjs
-            .utc()
-            .add(10, 'minute')
-            .isBefore(dayjs(store.getters.accessTokenExpireUtcTime))
-        ) {
-          next()
-        } else if (
-          store.getters.refreshTokenExpireTime &&
-          dayjs
-            .utc()
-            .add(29, 'day')
-            .isAfter(dayjs(store.getters.refreshTokenExpireTime))
-        ) {
-          // 超时 直接返回登录页
-          store.dispatch('token/logout')
-          next(`/login?redirect=${to.path}`)
-          NProgress.done()
-        } else {
-          console.log(getRefreshToken())
-          try {
-            await store.dispatch('token/refreshToken')
-            next()
-            NProgress.done()
-          } catch (error) {
-            // 超时 直接返回登录页
-            Message.error(error || 'Has Error')
-            await store.dispatch('token/logout')
-            next(`/login?redirect=${to.path}`)
-            NProgress.done()
-          }
-        }
-      }
+      next()
+      // if (store.getters.accessTokenExpireUtcTime) {
+      //   // 未超时
+      //   if (
+      //     dayjs
+      //       .utc()
+      //       .add(10, 'minute')
+      //       .isBefore(dayjs(store.getters.accessTokenExpireUtcTime))
+      //   ) {
+      //     next()
+      //   } else if (
+      //     store.getters.refreshTokenExpireTime &&
+      //     dayjs
+      //       .utc()
+      //       .add(29, 'day')
+      //       .isAfter(dayjs(store.getters.refreshTokenExpireTime))
+      //   ) {
+      //     // 超时 直接返回登录页
+      //     store.dispatch('token/logout')
+      //     next(`/login?redirect=${to.path}`)
+      //     NProgress.done()
+      //   } else {
+      //     console.log(getRefreshToken())
+      //     try {
+      //       await store.dispatch('token/refreshToken')
+      //       next()
+      //       NProgress.done()
+      //     } catch (error) {
+      //       // 超时 直接返回登录页
+      //       Message.error(error || 'Has Error')
+      //       await store.dispatch('token/logout')
+      //       next(`/login?redirect=${to.path}`)
+      //       NProgress.done()
+      //     }
+      //   }
+      // }
 
       // const hasGetUserInfo = store.getters.name
       // if (hasGetUserInfo) {
